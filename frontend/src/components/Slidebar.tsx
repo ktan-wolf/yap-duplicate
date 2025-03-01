@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import XSvg from "./X";
 import { MdHomeFilled } from "react-icons/md";
 import { IoNotifications } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
@@ -8,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { User as DataType } from "../utils/db/dummy";
 import axios, { isAxiosError } from "axios";
-import bigLogo from "../../public/bigLogo.jpg"
+import bigLogo from "../assets/bigLogo.jpg";
 
 function Slidebar() {
 	const queryClient = useQueryClient()

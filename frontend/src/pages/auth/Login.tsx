@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { isAxiosError } from "axios";
 import toast from "react-hot-toast";
-import logo from "../../../public/logo.jpg"
+import logo from "../../assets/logo.jpg";
 
 
 interface FormInputs {

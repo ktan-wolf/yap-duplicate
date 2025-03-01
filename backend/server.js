@@ -19,7 +19,7 @@ v2.config({
 });
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 app.use(express.json({limit: "5mb"}));    
 app.use(express.urlencoded({ extended: true }));
@@ -32,6 +32,6 @@ app.use('/api/posts', postRoutes);
 app.use('/api/notifications', notificationsRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
+  console.log(`app listening on port ${PORT}!`);
   connectMongoDB();
 });

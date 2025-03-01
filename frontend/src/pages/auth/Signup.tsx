@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import XSvg from "../../components/X";
-import logo from "../../../public/logo.jpg"
+import logo from "../../assets/logo.jpg";
 
 
 import { MdDriveFileRenameOutline, MdOutlineMail, MdPassword } from "react-icons/md";
