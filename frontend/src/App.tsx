@@ -16,7 +16,7 @@ function App() {
     queryKey: ['authUser'],        
     queryFn: async () => {
       try {
-        const res = await axios.get("/api/auth/me");
+        const res = await axios.get("https://yap-duplicate-1.onrender.com/api/auth/me");
 
         
         return res.data.user;

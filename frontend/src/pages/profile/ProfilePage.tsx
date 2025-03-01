@@ -38,7 +38,7 @@ function ProfilePage() {
 		queryKey: ["userProfile"],
 		queryFn: async () => {
 			try {
-				const res = await axios.get(`/api/users/profile/${username}`)
+				const res = await axios.get(`https://yap-duplicate-1.onrender.com/api/users/profile/${username}`)
 				return res.data;
 			} catch (error) {
 				if (axios.isAxiosError(error)) throw error;
@@ -51,7 +51,7 @@ function ProfilePage() {
 	const {mutateAsync:updateProfile, isPending:isUpdatingProfile} = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await axios.put(`/api/users/update`,{
+				const res = await axios.put(`https://yap-duplicate-1.onrender.com/api/users/update`,{
 					coverImg,
                     profileImg
 				});

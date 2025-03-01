@@ -24,7 +24,7 @@ function CreatePost() {
   const {mutate: createPost, isPending, isError, error} = useMutation({
 	mutationFn: async ({text, img} : MutateType) => {
 		try {
-			const res = await axios.post('/api/posts/create',{
+			const res = await axios.post('https://yap-duplicate-1.onrender.com/api/posts/create',{
 				text,
 				img
 			},{

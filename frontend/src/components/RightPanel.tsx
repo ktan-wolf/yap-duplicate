@@ -11,7 +11,7 @@ function RightPanel() {
 		queryKey: ["suggestedUser"],
 		queryFn: async () =>{
 			try {
-                const res = await axios.get("/api/users/suggested");
+                const res = await axios.get("https://yap-duplicate-1.onrender.com/api/users/suggested");
                 return res.data;
             } catch (error) {
                 if (axios.isAxiosError(error)) {

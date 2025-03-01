@@ -30,7 +30,7 @@ const NotificationPage = () => {
 		queryKey: ["notifications"],
 		queryFn: async () => {
 			try {
-				const res = await axios.get('/api/notifications');
+				const res = await axios.get('https://yap-duplicate-1.onrender.com/api/notifications');
 				return res.data;
 			} catch (error) {
 				if(axios.isAxiosError(error)) throw error;
@@ -42,7 +42,7 @@ const NotificationPage = () => {
 	const {mutate: deleteNotifications} = useMutation<DeleteResponse>({
 		mutationFn: async () => {
             try {
-                const res = await axios.delete('/api/notifications');
+                const res = await axios.delete('https://yap-duplicate-1.onrender.com/api/notifications');
                 return res.data;
             } catch (error) {
                 if(axios.isAxiosError(error)) throw error;

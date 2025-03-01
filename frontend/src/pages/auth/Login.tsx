@@ -22,7 +22,7 @@ function Login() {
   const {mutate: loginMutation, isError, isPending, error} = useMutation({
     mutationFn: async ({username, password} : FormInputs) => {
       try {
-        const res = await axios.post("/api/auth/login",{
+        const res = await axios.post("https://yap-duplicate-1.onrender.com/api/auth/login",{
           username,
           password
         },{

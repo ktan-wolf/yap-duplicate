@@ -33,7 +33,7 @@ const Signup = () => {
   const {mutate, isError, isPending, error} = useMutation({
     mutationFn: async ({email, username, fullname, password} : FormInput) => {
       try {
-        const res = await axios.post("/api/auth/signup",{
+        const res = await axios.post("https://yap-duplicate-1.onrender.com/api/auth/signup",{
           email,
           username,
           fullname,
