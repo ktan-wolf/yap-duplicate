@@ -34,44 +34,70 @@ function ProfilePage() {
 	const {data:authUser} = useQuery<UserType>({queryKey: ["authUser"]})
 	const queryClient = useQueryClient();
 
-	const {data:user, isLoading, refetch, isRefetching} = useQuery<UserType>({
+	const { data: user, isLoading, refetch, isRefetching } = useQuery<UserType>({
 		queryKey: ["userProfile"],
 		queryFn: async () => {
-			try {
-				const res = await axios.get(`https://yap-duplicate-1.onrender.com/api/users/profile/${username}`)
-				return res.data;
-			} catch (error) {
-				if (axios.isAxiosError(error)) throw error;
-				else throw new Error("server not responding")
+		  try {
+			const token = localStorage.getItem("token"); // Get token from storage
+			if (!token) {
+			  throw new Error("No authentication token found");
 			}
-		}
-	})
-
-
-	const {mutateAsync:updateProfile, isPending:isUpdatingProfile} = useMutation({
-		mutationFn: async () => {
-			try {
-				const res = await axios.put(`https://yap-duplicate-1.onrender.com/api/users/update`,{
-					coverImg,
-                    profileImg
-				});
-				return res.data;
-			} catch (error) {
-				if (axios.isAxiosError(error)) throw error;
-				else throw new Error("Server not responding");
-			}
+	  
+			const res = await axios.get(
+			  `https://yap-duplicate-1.onrender.com/api/users/profile/${username}`,
+			  {
+				headers: {
+				  Authorization: `Bearer ${token}`, // Send token in the request
+				},
+				withCredentials: true,
+			  }
+			);
+			return res.data;
+		  } catch (error) {
+			if (axios.isAxiosError(error)) throw error;
+			else throw new Error("Server not responding");
+		  }
 		},
-		onSuccess: ()=>{
-            toast.success("Profile updated");
-            Promise.all([
-				queryClient.invalidateQueries({queryKey: ["authUser"]}),
-				queryClient.invalidateQueries({queryKey: ["userProfile"]})
-			])
-        },
-		onError: ()=>{
-            toast.error("Failed to update profile");
-        }
-	})
+	  });
+	  
+
+
+	  const { mutateAsync: updateProfile, isPending: isUpdatingProfile } = useMutation({
+		mutationFn: async () => {
+		  try {
+			const token = localStorage.getItem("token");
+			if (!token) {
+			  throw new Error("No authentication token found");
+			}
+	  
+			const res = await axios.put(
+			  `https://yap-duplicate-1.onrender.com/api/users/update`,
+			  { coverImg, profileImg },
+			  {
+				headers: {
+				  Authorization: `Bearer ${token}`,
+				},
+				withCredentials: true,
+			  }
+			);
+			return res.data;
+		  } catch (error) {
+			if (axios.isAxiosError(error)) throw error;
+			else throw new Error("Server not responding");
+		  }
+		},
+		onSuccess: () => {
+		  toast.success("Profile updated");
+		  Promise.all([
+			queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+			queryClient.invalidateQueries({ queryKey: ["userProfile"] }),
+		  ]);
+		},
+		onError: () => {
+		  toast.error("Failed to update profile");
+		},
+	  });
+	  
 
 	const isMyProfile = authUser?._id === user?._id;
 

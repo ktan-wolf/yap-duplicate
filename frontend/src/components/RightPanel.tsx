@@ -7,21 +7,36 @@ import useFollow from "../hooks/useFollow";
 import LoadingSpinner from "./LoadingSpinner";
 
 function RightPanel() {
-	const {data:suggestedUser, isLoading} = useQuery<User[]>({
+	const { data: suggestedUser, isLoading } = useQuery<User[]>({
 		queryKey: ["suggestedUser"],
-		queryFn: async () =>{
-			try {
-                const res = await axios.get("https://yap-duplicate-1.onrender.com/api/users/suggested");
-                return res.data;
-            } catch (error) {
-                if (axios.isAxiosError(error)) {
-					throw error;
-                }else{
-					throw new Error("Server error");
-				}
-            }
-		}
-	});
+		queryFn: async () => {
+		  try {
+			const token = localStorage.getItem("token"); // Retrieve token from storage
+			if (!token) {
+			  throw new Error("No authentication token found");
+			}
+	  
+			const res = await axios.get(
+			  "https://yap-duplicate-1.onrender.com/api/users/suggested",
+			  {
+				headers: {
+				  Authorization: `Bearer ${token}`, // Attach token to request
+				},
+				withCredentials: true, // Ensure cookies are sent if required
+			  }
+			);
+	  
+			return res.data;
+		  } catch (error) {
+			if (axios.isAxiosError(error)) {
+			  throw error;
+			} else {
+			  throw new Error("Server error");
+			}
+		  }
+		},
+	  });
+	  
 
 	const {followAndUnfollow, isPending} = useFollow();
 
