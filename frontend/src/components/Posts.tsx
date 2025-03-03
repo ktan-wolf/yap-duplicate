@@ -19,8 +19,6 @@ const getAuthToken = async () => {
 		console.log("Token stored:", data.token);
 	  }
 	  console.log("token badi mehnat baad:", data.token);
-
-	  return data.token
   
 	} catch (error) {
 	  console.error("Error fetching user data:", error);
@@ -32,14 +30,21 @@ function Posts({feedType, username, userId}: {feedType?: string, username?: stri
 	const [token, setToken] = useState<string | null>(null);
 
 	useEffect(() => {
-		const authToken = getAuthToken(); // First check LocalStorage, then Cookies
-		if (authToken) {
-		  setToken(await authToken);
-		} else {
-			console.log("yhi hai na dikkat" , localStorage.getItem.)
-		  toast.error("Authentication token missing. Please log in.");
-		}
+		const fetchToken = async () => {
+		  await getAuthToken(); // Fetch token (stores it in LocalStorage)
+		  const authToken = localStorage.getItem("token"); // Get it from LocalStorage
+	  
+		  if (authToken) {
+			setToken(authToken); // ✅ Set token only after it's stored
+		  } else {
+			console.log("yhi hai na dikkat");
+			toast.error("Authentication token missing. Please log in.");
+		  }
+		};
+	  
+		fetchToken(); // Call async function inside useEffect
 	  }, []);
+	  
 
   const getPostEndPoint = () =>{
 	switch(feedType){
