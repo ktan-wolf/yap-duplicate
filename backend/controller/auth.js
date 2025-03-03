@@ -10,7 +10,7 @@ const signup = async (req,res) =>{
     const response = userSignUpSchema.safeParse(req.body);
     if(!response.success){
         return res.status(411).json({
-            message: "Wrong Input for Sigup"
+            message: "Wrong Input for signup"
         });
     }
 
@@ -65,6 +65,8 @@ const signup = async (req,res) =>{
 
 const login = async (req,res) =>{
     try {
+
+        console.log("entered in login")
         
         const response = userSignInSchema.safeParse(req.body);
         if(!response.success){
@@ -81,7 +83,8 @@ const login = async (req,res) =>{
             return res.status(400).json({ message: "Invalid username or password" });
         }
 
-        generateTokenAndSetCookie(user._id, res);
+        const token = generateTokenAndSetCookie(user._id, res);
+        console.log("token is this : " , token);
 
         return res.status(200).json({
             _id: user._id,
@@ -91,7 +94,8 @@ const login = async (req,res) =>{
             followers: user.followers,
             following: user.following,
             profileImg: user.profileImg,
-            coverImg: user.coverImg
+            coverImg: user.coverImg,
+            token: token
 
         });
     } catch (error) {

@@ -12,6 +12,10 @@ const generateTokenAndSetCookie = (userId, res) => {
         secure: process.env.NODE_ENV.trim() !== "development",
         
     })
+
+    console.log("token made is : " , token);
+
+    return token;
 }
 
 module.exports = generateTokenAndSetCookie;
