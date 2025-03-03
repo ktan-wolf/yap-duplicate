@@ -19,6 +19,14 @@ const protectRoute = async (req, res, next) => {
         }
 
         req.user = user;
+
+        // ✅ Send token along with user data in response
+        res.status(200).json({ 
+            message: "Authenticated successfully",
+            token, 
+            user 
+        });
+        
         next();
     } catch (error) {
         console.log("Error in protectedRoute middleware", error.message);

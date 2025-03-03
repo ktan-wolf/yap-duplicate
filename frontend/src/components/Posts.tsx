@@ -6,15 +6,25 @@ import toast from "react-hot-toast";
 import { Post as PostType} from "../utils/db/dummy";
 import { useEffect, useState } from "react";
 
-const getCookieToken = (): string | null => {
-	const cookies = document.cookie.split("; ");
-	for (const cookie of cookies) {
-	  const [name, value] = cookie.split("=");
-	  if (name === "token") {  // Ensure this matches the actual cookie name
-		return value;
+const getAuthToken = async () => {
+	try {
+	  const response = await fetch("https://your-backend.com/api/auth/protected-route", {
+		method: "GET",
+		credentials: "include", // Ensures cookies are sent
+	  });
+  
+	  const data = await response.json();
+	  if (data.token) {
+		localStorage.setItem("token", data.token); // Store token for API requests
+		console.log("Token stored:", data.token);
 	  }
+	  console.log("token badi mehnat baad:", data.token);
+
+	  return data.token
+  
+	} catch (error) {
+	  console.error("Error fetching user data:", error);
 	}
-	return null;
   };
 
 function Posts({feedType, username, userId}: {feedType?: string, username?: string, userId?: string}){
@@ -22,11 +32,11 @@ function Posts({feedType, username, userId}: {feedType?: string, username?: stri
 	const [token, setToken] = useState<string | null>(null);
 
 	useEffect(() => {
-		const cookieToken = getCookieToken(); // Get token from cookies
-		if (cookieToken) {
-		  localStorage.setItem("token", cookieToken); // Store in localStorage
-		  setToken(cookieToken);
+		const authToken = getAuthToken(); // First check LocalStorage, then Cookies
+		if (authToken) {
+		  setToken(await authToken);
 		} else {
+			console.log("yhi hai na dikkat" , localStorage.getItem.)
 		  toast.error("Authentication token missing. Please log in.");
 		}
 	  }, []);
