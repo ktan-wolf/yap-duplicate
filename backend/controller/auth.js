@@ -64,10 +64,7 @@ const signup = async (req,res) =>{
 }
 
 const login = async (req,res) =>{
-    try {
-
-        console.log("entered in login")
-        
+    try {        
         const response = userSignInSchema.safeParse(req.body);
         if(!response.success){
             res.status(411).json({

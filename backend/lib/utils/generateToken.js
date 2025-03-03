@@ -13,8 +13,6 @@ const generateTokenAndSetCookie = (userId, res) => {
         
     })
 
-    console.log("token made is : " , token);
-
     return token;
 }
 
