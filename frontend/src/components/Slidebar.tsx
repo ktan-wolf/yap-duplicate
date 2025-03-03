@@ -50,6 +50,9 @@ function Slidebar() {
           }
         );
         localStorage.removeItem("token"); // Clear token on logout
+
+		// Manually remove cookie (debugging purposes)
+		document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
       } catch (error) {
         const errorMsg = isAxiosError(error) ? error.response?.data?.message : "Something went wrong";
         toast.error(errorMsg);

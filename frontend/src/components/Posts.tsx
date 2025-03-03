@@ -6,17 +6,30 @@ import toast from "react-hot-toast";
 import { Post as PostType} from "../utils/db/dummy";
 import { useEffect, useState } from "react";
 
+const getCookieToken = (): string | null => {
+	const cookies = document.cookie.split("; ");
+	for (const cookie of cookies) {
+	  const [name, value] = cookie.split("=");
+	  if (name === "token") {  // Ensure this matches the actual cookie name
+		return value;
+	  }
+	}
+	return null;
+  };
+
 function Posts({feedType, username, userId}: {feedType?: string, username?: string, userId?: string}){
 	
 	const [token, setToken] = useState<string | null>(null);
 
 	useEffect(() => {
-	  const storedToken = localStorage.getItem("token");
-	  if (!storedToken) {
-		toast.error("Authentication token missing. Please log in.");
-	  }
-	  setToken(storedToken);
-	}, []);	
+		const cookieToken = getCookieToken(); // Get token from cookies
+		if (cookieToken) {
+		  localStorage.setItem("token", cookieToken); // Store in localStorage
+		  setToken(cookieToken);
+		} else {
+		  toast.error("Authentication token missing. Please log in.");
+		}
+	  }, []);
 
   const getPostEndPoint = () =>{
 	switch(feedType){

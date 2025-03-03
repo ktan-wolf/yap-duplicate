@@ -101,15 +101,21 @@ const login = async (req,res) =>{
     }
 }
 
-const logout = async (req,res) =>{
+const logout = async (req, res) => {
     try {
-        res.cookie("token", "", {maxAge: 0})
-        res.status(200).json({msg: "Logged out successfully"})
+        res.cookie("jwt", "", {
+            httpOnly: true,
+            secure: true, 
+            sameSite: "None", 
+            expires: new Date(0) // Immediately expires the cookie
+        });
+
+        res.status(200).json({ msg: "Logged out successfully" });
     } catch (error) {
         console.log("Error in logout controller", error.message);
         return res.status(500).json({ message: "Internal Server Error" });
     }
-}
+};
 
 const getMe = async (req, res) => {
     try {
