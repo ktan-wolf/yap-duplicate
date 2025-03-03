@@ -4,10 +4,20 @@ import PostSkeleton from "./PostSkeleton";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Post as PostType} from "../utils/db/dummy";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Posts({feedType, username, userId}: {feedType?: string, username?: string, userId?: string}){
 	
+	const [token, setToken] = useState<string | null>(null);
+
+	useEffect(() => {
+	  const storedToken = localStorage.getItem("token");
+	  if (!storedToken) {
+		toast.error("Authentication token missing. Please log in.");
+	  }
+	  setToken(storedToken);
+	}, []);	
+
   const getPostEndPoint = () =>{
 	switch(feedType){
 		case "forYou": return '/api/posts/all';
@@ -20,40 +30,37 @@ function Posts({feedType, username, userId}: {feedType?: string, username?: stri
 
   const POST_ENDPOINT = getPostEndPoint();
   const { data: posts, isLoading, refetch, isRefetching } = useQuery<PostType[]>({
-	queryKey: ["posts"],
-	queryFn: async () => {
-	  try {
-		const token = localStorage.getItem("token"); // Ensure token is stored
+    queryKey: ["posts", feedType, username, userId], // Dynamic query key
+    queryFn: async () => {
 		if (!token) {
-		  throw new Error("No authentication token found");
-		}
-  
-		const res = await axios.get<PostType[]>(POST_ENDPOINT, {
-		  headers: {
-			Authorization: `Bearer ${token}`, // Include the token in headers
-		  },
-		  withCredentials: true, // Ensure credentials are sent if using cookies
-		});
-  
-		return res.data;
-	  } catch (error) {
-		if (axios.isAxiosError(error)) {
-		  const errorMsg = error.response?.data?.message || "An unexpected error occurred";
-		  toast.error(errorMsg);
-		} else {
-		  console.error(error);
-		  toast.error("An unexpected error occurred");
-		}
-		return [];
-	  }
-	}
+			throw new Error("No authentication token found");
+		  }
+	
+		  try {
+			const res = await axios.get<PostType[]>(POST_ENDPOINT, {
+			  headers: { Authorization: `Bearer ${token}` },
+			  withCredentials: true,
+			});
+	
+			return res.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const errorMsg = error.response?.data?.message || "An unexpected error occurred";
+          toast.error(errorMsg);
+        } else {
+          toast.error("An unexpected error occurred");
+        }
+        return [];
+      }
+    },
+	enabled: !!token, // Only run the query if token exists
+    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
   });
   
 
-  useEffect(()=>{
-	refetch();
-
-  },[feedType, refetch, username])
+  useEffect(() => {
+    refetch();
+  }, [feedType, username, userId, refetch , token]); // Ensure it refetches when dependencies change
 
   return (
     <>

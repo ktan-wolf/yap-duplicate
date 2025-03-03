@@ -12,22 +12,22 @@ import axios from "axios"
 import LoadingSpinner from "./components/LoadingSpinner"
 
 function App() {
-  const {data: authUser, isLoading} = useQuery({
-    queryKey: ['authUser'],        
+  const { data: authUser, isLoading } = useQuery({
+    queryKey: ["authUser"],
     queryFn: async () => {
       try {
-        const res = await axios.get("https://yap-duplicate-1.onrender.com/api/auth/me" , {
-          withCredentials: true, // Ensures the cookie is sent with the request
+        const res = await axios.get("https://yap-duplicate-1.onrender.com/api/auth/me", {
+          withCredentials: true, // Ensure cookies are sent
         });
-
-        
         return res.data.user;
       } catch (error) {
-        return null;
+        console.error("Auth fetch failed:", error);
+        return null; // Ensure the user state is handled properly
       }
     },
-    retry: false
-  })
+    retry: false, // Avoid unnecessary retries
+  });
+  
 
   if (isLoading){
     return (
