@@ -16,7 +16,9 @@ function App() {
     queryKey: ['authUser'],        
     queryFn: async () => {
       try {
-        const res = await axios.get("https://yap-duplicate-1.onrender.com/api/auth/me");
+        const res = await axios.get("https://yap-duplicate-1.onrender.com/api/auth/me" , {
+          withCredentials: true, // Ensures the cookie is sent with the request
+        });
 
         
         return res.data.user;

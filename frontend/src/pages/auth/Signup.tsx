@@ -41,7 +41,8 @@ const Signup = () => {
         },{
           headers: {
             "Content-Type": "application/json"
-          }
+          },
+          withCredentials : true
         })
 
         toast.success("Account created successfully");

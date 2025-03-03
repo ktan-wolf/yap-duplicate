@@ -17,7 +17,16 @@ interface Props {
 function Post({post}: Props) {
   const [comment, setComment] = useState<string>();
 
-  const {data:authUser} = useQuery<DataType>({queryKey: ["authUser"]});
+  const { data: authUser } = useQuery<DataType>({
+    queryKey: ["authUser"],
+    queryFn: async () => {
+      const res = await axios.get("https://yap-duplicate-1.onrender.com/api/auth/me", {
+        withCredentials: true,
+      });
+      return res.data;
+    },
+  });
+  
   const queryClient = useQueryClient();
 
   const {mutate: deletePost, isPending: isDeleting} = useMutation({
@@ -83,7 +92,8 @@ function Post({post}: Props) {
 			},{
 				headers: {
                     "Content-Type": "application/json"
-                }
+                },
+				withCredentials : true
 			});
 			return res.data;
 		} catch (error) {

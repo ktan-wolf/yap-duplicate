@@ -30,7 +30,8 @@ function CreatePost() {
 			},{
 				headers: {
 					"Content-Type": "application/json"
-                }
+                },
+				withCredentials : true
 			});			
 			
             return res.data;
