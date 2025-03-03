@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Post from "./Post";
 import PostSkeleton from "./PostSkeleton";
-import axios, { isAxiosError } from "axios";
+import axios from "axios";
 import toast from "react-hot-toast";
 import { Post as PostType} from "../utils/db/dummy";
 import { useEffect } from "react";
